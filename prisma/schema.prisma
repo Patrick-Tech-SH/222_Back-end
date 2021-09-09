@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures =["referentialActions"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  userId   Int    @id @unique @default(autoincrement())
+  userName String @unique @db.VarChar(45)
+  password String @db.Char(64)
+  email    String @unique @db.VarChar(45)
+  fName    String @db.VarChar(45)
+  lName    String @db.VarChar(45)
+  cart     cart[]
+}
+
+model platform {
+  pId      Int        @id @unique @default(autoincrement())
+  pName    String     @unique @db.VarChar(50)
+  keygames keygames[]
+}
+
+model cart {
+  cartId         Int      @id @unique @default(autoincrement())
+  keyGames_keyId Int
+  user_userId    Int
+  keygames       keygames @relation(fields: [keyGames_keyId], references: [keyId],onDelete:Cascade)
+  user           user     @relation(fields: [user_userId], references: [userId])
+
+  @@index([keyGames_keyId], name: "fk_keyGames_has_user_keyGames1_idx")
+  @@index([user_userId], name: "fk_keyGames_has_user_user1_idx")
+}
+
+model gamedeveloper {
+  devId    Int        @id @unique @default(autoincrement())
+  devName  String     @db.VarChar(50)
+  keygames keygames[]
+}
+
+model gametags {
+  tagId       Int           @id @unique @default(autoincrement())
+  tagName     String        @unique @db.VarChar(45)
+  keycategory keycategory[]
+}
+
+model keycategory {
+  kcId           Int      @id @default(autoincrement())
+  keyGames_keyID Int
+  gameTags_tagId Int
+  gametags       gametags @relation(fields: [gameTags_tagId], references: [tagId])
+  keygames       keygames @relation(fields: [keyGames_keyID], references: [keyId],onDelete:Cascade)
+
+  @@index([gameTags_tagId], name: "fk_keyGames_has_gameTags_gameTags1_idx")
+  @@index([keyGames_keyID], name: "fk_keyGames_has_gameTags_keyGames1_idx")
+}
+
+model keygames {
+  keyId               Int           @unique @default(autoincrement())
+  gameName            String        @db.VarChar(50)
+  gameDetail          String        @db.VarChar(2000)
+  price               Decimal       @db.Decimal(7, 2)
+  releaseDate         DateTime      @db.Date
+  gameDeveloper_devId Int
+  Platform_pId        Int
+  platform            platform      @relation(fields: [Platform_pId], references: [pId])
+  gamedeveloper       gamedeveloper @relation(fields: [gameDeveloper_devId], references: [devId])
+  cart                cart[]
+  keycategory         keycategory[]
+
+  @@id([keyId, gameDeveloper_devId, Platform_pId])
+  @@index([Platform_pId], name: "fk_keyGames_Platform1_idx")
+  @@index([gameDeveloper_devId], name: "fk_keyGames_gameDeveloper1_idx")
+}
