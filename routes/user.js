@@ -45,4 +45,19 @@ router.put("/update/:id",async(req,res) =>{
     res.send("Update Successfully")
 })
 
+router.delete("/del/:id",async(req,res) =>{
+    let id = req.params.id
+    id = parseInt(id)
+   
+    let result = await user.deleteMany({
+        where:{
+            userId:id
+        }
+    })
+    if(result.count==0){
+        return res.send("Delete faild please check your user id!")
+    }
+    return res.send("Delete success ")
+})
+
 module.exports = router
