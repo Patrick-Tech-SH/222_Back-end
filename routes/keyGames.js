@@ -41,7 +41,7 @@ router.put("/update/:id",async(req,res) =>{
     id = parseInt(id)
     let {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId} = req.body
     if(!(gameName&&gameDetail&&price&&releaseDate&&gameDeveloper_devId&&Platform_pId)){
-        return res.send("Please check youu data again!!")
+        return res.send("Can not find user id.  Please check your user id !")
     }
     releaseDate =  new Date(releaseDate)
     let keygameObject =  {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId}

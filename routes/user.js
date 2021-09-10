@@ -28,4 +28,21 @@ router.post("/add",async(req,res) =>{
     return res.send("Add success ")
 })
 
+router.put("/update/:id",async(req,res) =>{
+    let id = req.params.id
+    id = parseInt(id)
+    let {userName,password,email,fName,lName} = req.body
+    if(!(userName&&password&&email&&fName&&lName)){
+        return res.send("Can not find user id.  Please check your user id !")
+    }
+    let userObject =  {userName,password,email,fName,lName}
+    let result = await user.updateMany({
+        where :{
+            userId:id
+        },
+        data: userObject
+    })
+    res.send("Update Successfully")
+})
+
 module.exports = router
