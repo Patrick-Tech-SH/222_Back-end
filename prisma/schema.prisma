@@ -29,7 +29,7 @@ model cart {
   keyGames_keyId Int
   user_userId    Int
   keygames       keygames @relation(fields: [keyGames_keyId], references: [keyId],onDelete:Cascade)
-  user           user     @relation(fields: [user_userId], references: [userId])
+  user           user     @relation(fields: [user_userId], references: [userId],onDelete:Cascade)
 
   @@index([keyGames_keyId], name: "fk_keyGames_has_user_keyGames1_idx")
   @@index([user_userId], name: "fk_keyGames_has_user_user1_idx")
