@@ -8,6 +8,8 @@ const prisma = new PrismaClient()
 const keygames = require('./routes/keyGames')
 const platform = require('./routes/platform')
 const user = require('./routes/user')
+const gamedeveloper = require('./routes/gameDeveloper')
+const gametags = require('./routes/gameTags')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended:true}));
@@ -26,6 +28,8 @@ app.get('/',(req,res) =>{
 app.use('/keygames',keygames)
 app.use('/platform',platform)
 app.use('/user',user)
+app.use('/gamedeveloper',gamedeveloper)
+app.use('/gametags',gametags)
 
 let port = 3000
 app.listen(port, () =>{
