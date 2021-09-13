@@ -40,9 +40,6 @@ router.put("/update/:id",async(req,res) =>{
     let id = req.params.id
     id = parseInt(id)
     let {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId} = req.body
-    if(!(gameName&&gameDetail&&price&&releaseDate&&gameDeveloper_devId&&Platform_pId)){
-        return res.send("Can not find user id.  Please check your user id !")
-    }
     releaseDate =  new Date(releaseDate)
     let keygameObject =  {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId}
     let result = await keygames.updateMany({
@@ -51,7 +48,11 @@ router.put("/update/:id",async(req,res) =>{
         },
         data: keygameObject
     })
+    if((result.count==0)){
+        return res.send("Can not find user id.  Please check your user id !")
+    }
     res.send("Update Successfully")
+    console.log(result)
 })
 router.delete("/del/:id",async(req,res) =>{
     let id = req.params.id
