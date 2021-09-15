@@ -4,6 +4,7 @@ let bodyParser = require('body-parser')
 let mysql = require('mysql')
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
+const cors = require('cors')
 
 const keygames = require('./routes/keyGames')
 const platform = require('./routes/platform')
@@ -30,6 +31,11 @@ app.use('/platform',platform)
 app.use('/user',user)
 app.use('/gamedeveloper',gamedeveloper)
 app.use('/gametags',gametags)
+
+app.use(cors({
+    origin: process.env.ORIGIN,
+    methods: ['GET','POST','PUT','DELETE','HEAD','OPTION']
+}))
 
 let port = 3000
 app.listen(port, () =>{
