@@ -14,12 +14,12 @@ router.get("/", async (req, res) => {
 })
 
 router.post("/add",async(req,res) =>{
-    let {userName,password,email,fName,lName} = req.body
-    if(!(userName&&password&&email&&fName&&lName)){
+    let {userName,password,email,fName,lName,token} = req.body
+    if(!(userName&&password&&email&&fName&&lName&&token)){
         return res.send("Please check youu data again!!")
     }
     
-    let userObject =  {userName,password,email,fName,lName}
+    let userObject =  {userName,password,email,fName,lName,token}
     
     let result = await user.createMany({
         data: userObject
@@ -31,11 +31,11 @@ router.post("/add",async(req,res) =>{
 router.put("/update/:id",async(req,res) =>{
     let id = req.params.id
     id = parseInt(id)
-    let {userName,password,email,fName,lName} = req.body
-    if(!(userName&&password&&email&&fName&&lName)){
+    let {userName,password,email,fName,lName,token} = req.body
+    if(!(userName&&password&&email&&fName&&lName&&token)){
         return res.send("Can not find user id.  Please check your user id !")
     }
-    let userObject =  {userName,password,email,fName,lName}
+    let userObject =  {userName,password,email,fName,lName,token}
     let result = await user.updateMany({
         where :{
             userId:id

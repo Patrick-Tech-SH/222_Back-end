@@ -18,14 +18,14 @@ app.use(express.urlencoded({ extended:true}));
 
 
 //honepage route
-app.get('/',(req,res) =>{
-    return res.send({
-        error: false, 
-        message:'Homepage is working'
+// app.get('/',(req,res) =>{
+//     return res.send({
+//         error: false, 
+//         message:'Homepage is working'
         
 
-    })
-})
+//     })
+// })
 app.use('/keygames',keygames)
 app.use('/platform',platform)
 app.use('/user',user)
