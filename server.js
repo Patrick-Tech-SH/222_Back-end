@@ -6,11 +6,11 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const cors = require('cors')
 
-const keygames = require('./routes/keyGames')
-const platform = require('./routes/platform')
-const user = require('./routes/user')
-const gamedeveloper = require('./routes/gameDeveloper')
-const gametags = require('./routes/gameTags')
+const keygames = require('./src/routes/keyGames')
+const platform = require('./src/routes/platform')
+const user = require('./src/routes/user')
+const gamedeveloper = require('./src/routes/gameDeveloper')
+const gametags = require('./src/routes/gameTags')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended:true}));

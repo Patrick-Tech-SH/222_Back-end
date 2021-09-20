@@ -2,7 +2,7 @@ const router = require("express").Router()
 const { PrismaClient } = require("@prisma/client")
 const { keygames,cart,keycategory } = new PrismaClient()
 const dayjs = require("dayjs")
-const { request } = require("../server")
+const { request } = require("../../server")
 
 router.get("/", async (req, res) => {
     let totalkeygames = await keygames.findMany({

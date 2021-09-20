@@ -1,6 +1,11 @@
 const router = require("express").Router()
 const { PrismaClient } = require("@prisma/client")
 const { user } = new PrismaClient()
+const connectuser = require("../model/model")
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+const fs = require("fs/promises")
+
 
 router.get("/", async (req, res) => {
     let totaluser = await user.findMany({
@@ -60,4 +65,16 @@ router.delete("/del/:id",async(req,res) =>{
     return res.send("Delete success ")
 })
 
+
+router.post("/register",async(req,res) =>{
+try{
+
+} catch(error){
+    console.log(err)
+}
+})
+
+router.post("/login",async(req,res) =>{
+    
+})
 module.exports = router
