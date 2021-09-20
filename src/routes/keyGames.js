@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
         include: {
             gamedeveloper: true,
             platform: true,
-            keycategory: true,
+            keycategory:{include:{gametags:{select:{tagName:true}}}} ,
             cart:true
         }
     })

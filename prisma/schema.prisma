@@ -15,7 +15,6 @@ model user {
   email    String @unique @db.VarChar(45)
   fName    String @db.VarChar(45)
   lName    String @db.VarChar(45)
-  token    String @db.VarChar(100)
   cart     cart[]
 }
 
