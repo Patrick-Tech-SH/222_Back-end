@@ -21,6 +21,10 @@ router.get("/",authen, async (req, res) => {
 
 })
 
+router.get("/profile",authen, async(req,res) => {
+    res.send({user:req.user})
+})
+
 router.post("/add",async(req,res) =>{
     let {userName,password,email,fName,lName} = req.body
     if(!(userName&&password&&email&&fName&&lName)){
@@ -136,7 +140,7 @@ router.post('/login', async (req, res) => {
         
 
          delete existUser.password 
-    const token =jwt.sign(existUser, process.env.Token_Key,{expiresIn:"1h"})
+    const token =jwt.sign(existUser, process.env.Token_Key,{expiresIn:"5m"})
        return res.header("access-token",token).send({ token: token})
 
     } catch(error) {
