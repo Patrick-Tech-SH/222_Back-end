@@ -12,6 +12,11 @@ const user = require('./src/routes/user')
 const gamedeveloper = require('./src/routes/gameDeveloper')
 const gametags = require('./src/routes/gameTags')
 
+app.use(cors({
+    origin: process.env.ORIGIN,
+    methods: ['GET','POST','PUT','DELETE','HEAD','OPTION']
+}))
+
 app.use(express.json())
 app.use(express.urlencoded({ extended:true}));
 
@@ -32,10 +37,7 @@ app.use('/user',user)
 app.use('/gamedeveloper',gamedeveloper)
 app.use('/gametags',gametags)
 
-app.use(cors({
-    origin: process.env.ORIGIN,
-    methods: ['GET','POST','PUT','DELETE','HEAD','OPTION']
-}))
+
 
 let port = 3000
 app.listen(port, () =>{
