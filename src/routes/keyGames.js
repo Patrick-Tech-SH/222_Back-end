@@ -7,10 +7,11 @@ const { request } = require("../../server")
 router.get("/", async (req, res) => {
     let totalkeygames = await keygames.findMany({
         include: {
-            gamedeveloper: true,
-            platform: true,
+            gamedeveloper:true,
+            platform:true,
             keycategory:{include:{gametags:{select:{tagName:true}}}} ,
             cart:true
+           
         }
     })
     totalkeygames.forEach(item => {
@@ -21,13 +22,13 @@ router.get("/", async (req, res) => {
 
 })
 router.post("/add",async(req,res) =>{
-    let {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId} = req.body
-    if(!(gameName&&gameDetail&&price&&releaseDate&&gameDeveloper_devId&&Platform_pId)){
+    let {gameName,gameDetail,price,releaseDate,images,gameDeveloper_devId,Platform_pId} = req.body
+    if(!(gameName&&gameDetail&&price&&releaseDate&&images&&gameDeveloper_devId&&Platform_pId)){
         return res.send("Please check youu data again!!")
     }
     releaseDate =  new Date(releaseDate)
     
-    let keygameObject =  {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId}
+    let keygameObject =  {gameName,gameDetail,price,releaseDate,images,gameDeveloper_devId,Platform_pId}
     
     let result = await keygames.createMany({
         data: keygameObject
@@ -39,9 +40,9 @@ router.post("/add",async(req,res) =>{
 router.put("/update/:id",async(req,res) =>{
     let id = req.params.id
     id = parseInt(id)
-    let {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId} = req.body
+    let {gameName,gameDetail,price,releaseDate,images,gameDeveloper_devId,Platform_pId} = req.body
     releaseDate =  new Date(releaseDate)
-    let keygameObject =  {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId}
+    let keygameObject =  {gameName,gameDetail,price,releaseDate,images,gameDeveloper_devId,Platform_pId}
     let result = await keygames.updateMany({
         where :{
             keyId:id

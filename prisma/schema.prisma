@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
-  previewFeatures =["referentialActions"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
 }
 
 datasource db {
@@ -28,8 +28,8 @@ model cart {
   cartId         Int      @id @unique @default(autoincrement())
   keyGames_keyId Int
   user_userId    Int
-  keygames       keygames @relation(fields: [keyGames_keyId], references: [keyId],onDelete:Cascade)
-  user           user     @relation(fields: [user_userId], references: [userId],onDelete:Cascade)
+  keygames       keygames @relation(fields: [keyGames_keyId], references: [keyId], onDelete: Cascade)
+  user           user     @relation(fields: [user_userId], references: [userId], onDelete: Cascade)
 
   @@index([keyGames_keyId], name: "fk_keyGames_has_user_keyGames1_idx")
   @@index([user_userId], name: "fk_keyGames_has_user_user1_idx")
@@ -52,7 +52,7 @@ model keycategory {
   keyGames_keyID Int
   gameTags_tagId Int
   gametags       gametags @relation(fields: [gameTags_tagId], references: [tagId])
-  keygames       keygames @relation(fields: [keyGames_keyID], references: [keyId],onDelete:Cascade)
+  keygames       keygames @relation(fields: [keyGames_keyID], references: [keyId], onDelete: Cascade)
 
   @@index([gameTags_tagId], name: "fk_keyGames_has_gameTags_gameTags1_idx")
   @@index([keyGames_keyID], name: "fk_keyGames_has_gameTags_keyGames1_idx")
@@ -64,6 +64,7 @@ model keygames {
   gameDetail          String        @db.VarChar(2000)
   price               Decimal       @db.Decimal(7, 2)
   releaseDate         DateTime      @db.Date
+  images              String?       @db.VarChar(100)
   gameDeveloper_devId Int
   Platform_pId        Int
   platform            platform      @relation(fields: [Platform_pId], references: [pId])
