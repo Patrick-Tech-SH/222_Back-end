@@ -26,13 +26,13 @@ model platform {
 
 model cart {
   cartId         Int      @id @unique @default(autoincrement())
-  keyGames_keyId Int
+  keygames_keyId Int
   user_userId    Int
-  keygames       keygames @relation(fields: [keyGames_keyId], references: [keyId], onDelete: Cascade)
-  user           user     @relation(fields: [user_userId], references: [userId], onDelete: Cascade)
+  keygames       keygames @relation(fields: [keygames_keyId], references: [keyId], onDelete: NoAction, onUpdate: NoAction)
+  user           user     @relation(fields: [user_userId], references: [userId], onDelete: NoAction, onUpdate: NoAction)
 
-  @@index([keyGames_keyId], name: "fk_keyGames_has_user_keyGames1_idx")
-  @@index([user_userId], name: "fk_keyGames_has_user_user1_idx")
+  @@index([keygames_keyId], name: "fk_keygames_has_user_keygames1_idx")
+  @@index([user_userId], name: "fk_keygames_has_user_user1_idx")
 }
 
 model gamedeveloper {
@@ -49,13 +49,13 @@ model gametags {
 
 model keycategory {
   kcId           Int      @id @default(autoincrement())
-  keyGames_keyID Int
-  gameTags_tagId Int
-  gametags       gametags @relation(fields: [gameTags_tagId], references: [tagId])
-  keygames       keygames @relation(fields: [keyGames_keyID], references: [keyId], onDelete: Cascade)
+  keygames_keyID Int
+  gametags_tagId Int
+  gametags       gametags @relation(fields: [gametags_tagId], references: [tagId], onDelete: NoAction, onUpdate: NoAction)
+  keygames       keygames @relation(fields: [keygames_keyID], references: [keyId], onDelete: NoAction, onUpdate: NoAction)
 
-  @@index([gameTags_tagId], name: "fk_keyGames_has_gameTags_gameTags1_idx")
-  @@index([keyGames_keyID], name: "fk_keyGames_has_gameTags_keyGames1_idx")
+  @@index([gametags_tagId], name: "fk_keygames_has_gametags_gametags1_idx")
+  @@index([keygames_keyID], name: "fk_keygames_has_gametags_keygames1_idx")
 }
 
 model keygames {
@@ -64,15 +64,15 @@ model keygames {
   gameDetail          String        @db.VarChar(2000)
   price               Decimal       @db.Decimal(7, 2)
   releaseDate         DateTime      @db.Date
-  images              String?       @db.VarChar(100)
-  gameDeveloper_devId Int
+  images              String?       @unique @db.VarChar(100)
+  gamedeveloper_devId Int
   Platform_pId        Int
-  platform            platform      @relation(fields: [Platform_pId], references: [pId])
-  gamedeveloper       gamedeveloper @relation(fields: [gameDeveloper_devId], references: [devId])
+  platform            platform      @relation(fields: [Platform_pId], references: [pId], onDelete: NoAction, onUpdate: NoAction)
+  gamedeveloper       gamedeveloper @relation(fields: [gamedeveloper_devId], references: [devId], onDelete: NoAction, onUpdate: NoAction)
   cart                cart[]
   keycategory         keycategory[]
 
-  @@id([keyId, gameDeveloper_devId, Platform_pId])
-  @@index([Platform_pId], name: "fk_keyGames_Platform1_idx")
-  @@index([gameDeveloper_devId], name: "fk_keyGames_gameDeveloper1_idx")
+  @@id([keyId, gamedeveloper_devId, Platform_pId])
+  @@index([Platform_pId], name: "fk_keygames_Platform1_idx")
+  @@index([gamedeveloper_devId], name: "fk_keygames_gamedeveloper1_idx")
 }
