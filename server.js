@@ -11,6 +11,7 @@ const platform = require('./src/routes/platform')
 const user = require('./src/routes/user')
 const gamedeveloper = require('./src/routes/gameDeveloper')
 const gametags = require('./src/routes/gameTags')
+const admin = require('./src/routes/admin')
 
 app.use(cors({
     origin: process.env.ORIGIN,
@@ -36,6 +37,7 @@ app.use('/platform',platform)
 app.use('/user',user)
 app.use('/gamedeveloper',gamedeveloper)
 app.use('/gametags',gametags)
+app.use('/admin', admin)
 
 
 

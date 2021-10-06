@@ -140,7 +140,7 @@ router.post('/login', async (req, res) => {
         
 
          delete existUser.password 
-    const token =jwt.sign(existUser, process.env.Token_Key,{expiresIn:"5m"})
+    const token =jwt.sign(existUser, process.env.Token_Key,{expiresIn:"30m"})
        return res.header("access-token",token).send({ token: token})
 
     } catch(error) {

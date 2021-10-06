@@ -15,7 +15,7 @@ model user {
   email    String @unique @db.VarChar(45)
   fName    String @db.VarChar(45)
   lName    String @db.VarChar(45)
-  cart     cart[]
+  cart     cart[] 
 }
 
 model platform {
@@ -29,7 +29,7 @@ model cart {
   keygames_keyId Int
   user_userId    Int
   keygames       keygames @relation(fields: [keygames_keyId], references: [keyId], onDelete: NoAction, onUpdate: NoAction)
-  user           user     @relation(fields: [user_userId], references: [userId], onDelete: NoAction, onUpdate: NoAction)
+  user           user     @relation(fields: [user_userId], references: [userId], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([keygames_keyId], name: "fk_keygames_has_user_keygames1_idx")
   @@index([user_userId], name: "fk_keygames_has_user_user1_idx")
@@ -75,4 +75,10 @@ model keygames {
   @@id([keyId, gamedeveloper_devId, Platform_pId])
   @@index([Platform_pId], name: "fk_keygames_Platform1_idx")
   @@index([gamedeveloper_devId], name: "fk_keygames_gamedeveloper1_idx")
+}
+
+model admin {
+  adminId  Int    @id @unique @default(autoincrement())
+  userName String @unique @db.VarChar(45)
+  password String @db.VarChar(100)
 }
