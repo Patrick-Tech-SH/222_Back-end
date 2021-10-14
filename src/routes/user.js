@@ -6,11 +6,13 @@ const fs = require("fs/promises")
 const { PrismaClient } = require("@prisma/client")
 const { response } = require("express")
 const {user } = new PrismaClient()
-const authen = require("../middlewares/authen")
+const {userToken} = require("../middlewares/authen")
+const  logout  = require('../model/model');
 
 
 
-router.get("/",authen, async (req, res) => {
+
+router.get("/",userToken, async (req, res) => {
     let totaluser = await user.findMany({
         include: {
             cart:true
@@ -21,7 +23,7 @@ router.get("/",authen, async (req, res) => {
 
 })
 
-router.get("/profile",authen, async(req,res) => {
+router.get("/profile",userToken, async(req,res) => {
     res.send({user:req.user})
 })
 
@@ -146,5 +148,13 @@ router.post('/login', async (req, res) => {
     } catch(error) {
         console.log(error)
      }
+})
+router.post('/logout',userToken,async(req,res) => {
+    await logout.create({
+        data:{
+            token:req.token
+        }
+    })
+    return res.status(200).send("logout successfully")
 })
 module.exports = router

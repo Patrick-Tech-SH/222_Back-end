@@ -15,7 +15,7 @@ model user {
   email    String @unique @db.VarChar(45)
   fName    String @db.VarChar(45)
   lName    String @db.VarChar(45)
-  cart     cart[] 
+  cart     cart[]
 }
 
 model platform {
@@ -81,4 +81,8 @@ model admin {
   adminId  Int    @id @unique @default(autoincrement())
   userName String @unique @db.VarChar(45)
   password String @db.VarChar(100)
+}
+
+model logoutToken {
+  token String @id @unique @db.VarChar(500)
 }

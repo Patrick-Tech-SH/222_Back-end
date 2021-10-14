@@ -1,6 +1,6 @@
 const router = require("express").Router()
 const { PrismaClient } = require("@prisma/client")
-const { keygames,cart,keycategory } = new PrismaClient()
+const { keygames,cart,keycategory,gametags } = new PrismaClient()
 const dayjs = require("dayjs")
 const { request } = require("../../server")
 
@@ -22,18 +22,28 @@ router.get("/", async (req, res) => {
 
 })
 router.post("/add",async(req,res) =>{
-    let {gameName,gameDetail,price,releaseDate,images,gameDeveloper_devId,Platform_pId} = req.body
-    if(!(gameName&&gameDetail&&price&&releaseDate&&images&&gameDeveloper_devId&&Platform_pId)){
+    let {gameName,gameDetail,price,releaseDate,images,gamedeveloper_devId,Platform_pId,gametags} = req.body
+    if(!(gameName&&gameDetail&&price&&releaseDate&&images&&gamedeveloper_devId&&Platform_pId)){
         return res.send("Please check youu data again!!")
     }
     releaseDate =  new Date(releaseDate)
     
-    let keygameObject =  {gameName,gameDetail,price,releaseDate,images,gameDeveloper_devId,Platform_pId}
+    let keygameObject =  {gameName,gameDetail,price,releaseDate,images,gamedeveloper_devId,Platform_pId}
     
-    let result = await keygames.createMany({
+    let result = await keygames.create({
         data: keygameObject
     })
-   
+    console.log(result)
+   for(let i = 0; i<gametags.length; i++){
+       await keycategory.createMany({
+           data: {
+               keygames_keyID:result.keyId,
+               gametags_tagId:gametags[i].id
+
+           }
+       })
+   }
+
     return res.send("Add success ")
 })
 
