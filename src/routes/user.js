@@ -42,21 +42,28 @@ router.post("/add",async(req,res) =>{
     return res.send("Add success ")
 })
 
-router.put("/update/:id",async(req,res) =>{
+router.put("/update/:id",userToken,async(req,res) =>{
     let id = req.params.id
     id = parseInt(id)
-    let {userName,password,email,fName,lName} = req.body
-    if(!(userName&&password&&email&&fName&&lName)){
+    let {password,email,fName,lName} = req.body
+    if(!(password&&email&&fName&&lName)){
         return res.send("Can not find user id.  Please check your user id !")
     }
-    let userObject =  {userName,password,email,fName,lName}
-    let result = await user.updateMany({
-        where :{
+    // let userObject =  {password,email,fName,lName}
+    encryptedPassword = await bcrypt.hash(password, 10);
+    // const hashPassword = await bcrypt.hash(password, encryptedPassword)
+    await user.update({
+        where:{
             userId:id
         },
-        data: userObject
+        data: {
+            password: encryptedPassword,
+            email: email.toLowerCase(),
+            fName: fName,
+            lName:lName
+        }
     })
-    res.send("Update Successfully")
+    return res.send("successfully")
 })
 
 router.delete("/del/:id",async(req,res) =>{
