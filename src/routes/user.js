@@ -44,7 +44,7 @@ router.post("/add",async(req,res) =>{
 
 router.put("/update/:id",userToken,async(req,res) =>{
     let id = req.params.id
-    id = parseInt(id)
+    id = Number(id)
     let {password,email,fName,lName} = req.body
     if(!(password&&email&&fName&&lName)){
         return res.send("Can not find user id.  Please check your user id !")
@@ -147,7 +147,9 @@ router.post('/login', async (req, res) => {
              return res.status(400).send("invalid email or password")
         }
         
-
+        if(existUser.status == true){
+            return res.status(401).send("User unauthorized")
+        }
          delete existUser.password 
     const token =jwt.sign(existUser, process.env.Token_Key,{expiresIn:"30m"})
        return res.header("access-token",token).send({ token: token})

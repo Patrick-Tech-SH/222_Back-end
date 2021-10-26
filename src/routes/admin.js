@@ -6,6 +6,7 @@ const authen = require("../middlewares/authen")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const fs = require("fs/promises")
+const { set } = require("../../server")
 
 router.get("/", async (req, res) => {
     let totaladmin = await admin.findMany({
@@ -16,19 +17,22 @@ router.get("/", async (req, res) => {
 
 })
 
-router.delete("/del/:id",async(req,res) =>{
+router.put("/manage/:id",async(req,res) =>{
     let id = req.params.id
-    id = parseInt(id)
+    id = Number(id)
+
+    // let {status} = req.body
    
-    let result = await user.deleteMany({
+     await user.update({
         where:{
             userId:id
+        },
+        data:{
+            status:true
         }
     })
-    if(result.count==0){
-        return res.send("Delete faild please check your user id!")
-    }
-    return res.send("Delete success ")
+
+    return res.send("change status success")
 })
 
 module.exports = router

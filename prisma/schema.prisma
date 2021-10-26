@@ -9,13 +9,15 @@ datasource db {
 }
 
 model user {
-  userId   Int    @id @unique @default(autoincrement())
-  userName String @unique @db.VarChar(45)
-  password String @db.Char(64)
-  email    String @unique @db.VarChar(45)
-  fName    String @db.VarChar(45)
-  lName    String @db.VarChar(45)
+  userId   Int        @id @unique @default(autoincrement())
+  userName String     @unique @db.VarChar(45)
+  password String     @db.Char(64)
+  email    String     @unique @db.VarChar(45)
+  fName    String     @db.VarChar(45)
+  lName    String     @db.VarChar(45)
+  status   Boolean    @default(false)
   cart     cart[]
+  keygames keygames[]
 }
 
 model platform {
@@ -67,14 +69,17 @@ model keygames {
   images              String?       @unique @db.VarChar(100)
   gamedeveloper_devId Int
   Platform_pId        Int
+  user_userId         Int
   platform            platform      @relation(fields: [Platform_pId], references: [pId], onDelete: NoAction, onUpdate: NoAction)
   gamedeveloper       gamedeveloper @relation(fields: [gamedeveloper_devId], references: [devId], onDelete: NoAction, onUpdate: NoAction)
+  user                user          @relation(fields: [user_userId], references: [userId], onDelete: NoAction, onUpdate: NoAction)
   cart                cart[]
   keycategory         keycategory[]
 
-  @@id([keyId, gamedeveloper_devId, Platform_pId])
+  @@id([keyId, gamedeveloper_devId, Platform_pId, user_userId])
   @@index([Platform_pId], name: "fk_keygames_Platform1_idx")
   @@index([gamedeveloper_devId], name: "fk_keygames_gamedeveloper1_idx")
+  @@index([user_userId], name: "fk_keygames_user1_idx")
 }
 
 model admin {
