@@ -22,13 +22,13 @@ router.get("/", async (req, res) => {
 
 })
 router.post("/add",async(req,res) =>{
-    let {gameName,gameDetail,price,releaseDate,images,gamedeveloper_devId,Platform_pId,gametags} = req.body
-    if(!(gameName&&gameDetail&&price&&releaseDate&&images&&gamedeveloper_devId&&Platform_pId)){
+    let {gameName,gameDetail,price,releaseDate,images,gamedeveloper_devId,Platform_pId,user_userId,gametags} = req.body
+    if(!(gameName&&gameDetail&&price&&releaseDate&&images&&gamedeveloper_devId&&Platform_pId&&user_userId)){
         return res.send("Please check youu data again!!")
     }
     releaseDate =  new Date(releaseDate)
     
-    let keygameObject =  {gameName,gameDetail,price,releaseDate,images,gamedeveloper_devId,Platform_pId}
+    let keygameObject =  {gameName,gameDetail,price,releaseDate,images,gamedeveloper_devId,Platform_pId,user_userId}
     
     let result = await keygames.create({
         data: keygameObject
