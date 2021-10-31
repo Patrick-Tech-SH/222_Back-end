@@ -49,7 +49,7 @@ router.post("/add",async(req,res) =>{
 
 router.put("/update/:id",async(req,res) =>{
     let id = req.params.id
-    id = parseInt(id)
+    id = Number(id)
     let {gameName,gameDetail,price,releaseDate,images,gameDeveloper_devId,Platform_pId} = req.body
     releaseDate =  new Date(releaseDate)
     let keygameObject =  {gameName,gameDetail,price,releaseDate,images,gameDeveloper_devId,Platform_pId}

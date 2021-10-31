@@ -142,6 +142,7 @@ router.post('/login', async (req, res) => {
         const existUser = await user.findFirst({
             where: { email: email }
         })
+        
         const validPassword =await bcrypt.compare(password,existUser.password)
         if (!(existUser && validPassword)) {
              return res.status(400).send("invalid email or password")
@@ -152,11 +153,12 @@ router.post('/login', async (req, res) => {
         }
          delete existUser.password 
     const token =jwt.sign(existUser, process.env.Token_Key,{expiresIn:"30m"})
-       return res.header("access-token",token).send({ token: token})
+       return res.header("access-token",token).send({ userId:existUser.userId,token: token})
 
     } catch(error) {
         console.log(error)
-     }
+     }     
+
 })
 router.post('/logout',userToken,async(req,res) => {
     await logout.create({
