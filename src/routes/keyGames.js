@@ -2,7 +2,39 @@ const router = require("express").Router()
 const { PrismaClient } = require("@prisma/client")
 const { keygames,cart,keycategory,gametags } = new PrismaClient()
 const dayjs = require("dayjs")
+const multer = require("multer")
+const path = require("path")
 const { request } = require("../../server")
+const { update } = require("../model/model")
+
+const storage = multer.diskStorage({
+    destination: './public/storageImages',
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+function checkFileType(file, cb) {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase())
+
+    const mimetype = filetypes.test(file.mimetype)
+
+    if (mimetype) {
+        return cb(null, true);
+    } else {
+        cb('error: image only')
+
+    }
+}
+
+const upload = multer({
+    storage: storage,
+    limits: { fieldSize: 500 },
+    fileFilter: function (req, file, cb) {
+        checkFileType(file, cb)
+    }
+})
 
 router.get("/", async (req, res) => {
     let totalkeygames = await keygames.findMany({
@@ -21,6 +53,89 @@ router.get("/", async (req, res) => {
      return res.send({ data: totalkeygames })
 
 })
+router.get("/getbyid/:id", async (req, res) => {
+    let id = req.params.id
+    id = Number(id)
+    let totalkeygames = await keygames.findMany({
+        where:{
+            keyId:id
+        },
+        include: {
+            gamedeveloper:true,
+            platform:true,
+            keycategory:{include:{gametags:{select:{tagName:true}}}} ,
+            cart:true
+           
+        }
+    })
+    totalkeygames.forEach(item => {
+        item.releaseDate = dayjs(item.releaseDate).format("DD/MM/YYYY")  
+    });
+    
+     return res.send({ data: totalkeygames })
+
+})
+router.get("/getimage/:id",async(req,res)=>{
+    let id = req.params.id
+    id = Number(id)
+    const result = await keygames.findFirst({
+        where:{
+            keyId:id
+        }
+    })
+    console.log(result)
+    let pathFile = path.join(__dirname, '../../public/storageImages/'+ result.images) 
+    return res.status(200).sendFile(pathFile)
+})
+
+router.post("/addimage/:id",upload.any(),async(req,res)=>{
+    let id = req.params.id
+    id = Number(id)
+    const file = req.files
+    console.log(file)
+   const result =  await keygames.update({
+        data:{
+            images:file[0].filename
+        },
+        where:{
+            keyId:id
+        }
+        
+    })
+    return res.status(200).send("upload success")
+})
+
+router.put("/updateimage/:id",upload.any(),async(req,res)=>{
+    let id = req.params.id
+    id = Number(id)
+    const file = req.files
+    console.log(file)
+    let findoldimg = await keygames.findFirst({
+        where:{
+            keyId:id
+        },
+        select:{
+            images:true
+        },
+    })
+    console.log(findoldimg)
+    var fs = require('fs');
+    let pathDelete = path.join(__dirname, '../../public/storageImages/'+findoldimg.images)
+    fs.unlinkSync(pathDelete);
+   const result =  await keygames.update({
+        data:{
+            images:file[0].filename
+        },
+        where:{
+            keyId:id
+        }
+        
+    })
+    return res.status(200).send("update images success")
+})
+
+
+
 router.post("/add",async(req,res) =>{
     let {gameName,gameDetail,price,releaseDate,images,gamedeveloper_devId,Platform_pId,user_userId,gametags} = req.body
     if(!(gameName&&gameDetail&&price&&releaseDate&&images&&gamedeveloper_devId&&Platform_pId&&user_userId)){
