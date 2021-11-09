@@ -2,13 +2,14 @@ const router = require("express").Router()
 const { PrismaClient } = require("@prisma/client")
 const { response } = require("express")
 const { admin,user} = new PrismaClient()
-const authen = require("../middlewares/authen")
+const {adminToken} = require("../middlewares/authen")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const fs = require("fs/promises")
 const { set } = require("../../server")
+const  logout  = require('../model/model');
 
-router.get("/", async (req, res) => {
+router.get("/",adminToken, async (req, res) => {
     let totaladmin = await admin.findMany({
 
     })
@@ -17,7 +18,7 @@ router.get("/", async (req, res) => {
 
 })
 
-router.put("/manage/:id",async(req,res) =>{
+router.put("/manage/:id",adminToken,async(req,res) =>{
     let id = req.params.id
     id = Number(id)
 
@@ -34,5 +35,33 @@ router.put("/manage/:id",async(req,res) =>{
 
     return res.send("change status success")
 })
+router.post('/login', async (req, res) => {
+    try {
+        const { userName, password } = req.body;
+        const existAdmin = await admin.findFirst({
+            where: { userName: userName }
+        })
+        
+        const validPassword =await bcrypt.compare(password,existAdmin.password)
+        if (!(existAdmin && validPassword)) {
+             return res.status(400).send("invalid Username or password")
+        }
+         delete existAdmin.password 
+    const token =jwt.sign(existAdmin, process.env.Token_Key,{expiresIn:"30m"})
+       return res.header("access-token",token).send({ adminId:existAdmin.adminId,token: token})
 
+    } catch(error) {
+        console.log(error)
+     }     
+
+})
+
+router.post('/logout',adminToken,async(req,res) => {
+    await logout.create({
+        data:{
+            token:req.token
+        }
+    })
+    return res.status(200).send("Logout successfully")
+})
 module.exports = router

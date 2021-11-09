@@ -1,5 +1,4 @@
 const router = require("express").Router()
-// const  user  = require("../model/model")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const fs = require("fs/promises")
@@ -27,20 +26,6 @@ router.get("/profile",userToken, async(req,res) => {
     res.send({user:req.user})
 })
 
-router.post("/add",async(req,res) =>{
-    let {userName,password,email,fName,lName} = req.body
-    if(!(userName&&password&&email&&fName&&lName)){
-        return res.send("Please check youu data again!!")
-    }
-    
-    let userObject =  {userName,password,email,fName,lName}
-    
-    let result = await user.createMany({
-        data: userObject
-    })
-   
-    return res.send("Add success ")
-})
 
 router.put("/update/:id",userToken,async(req,res) =>{
     let id = req.params.id
@@ -49,9 +34,9 @@ router.put("/update/:id",userToken,async(req,res) =>{
     if(!(password&&email&&fName&&lName)){
         return res.send("Can not find user id.  Please check your user id !")
     }
-    // let userObject =  {password,email,fName,lName}
+
     encryptedPassword = await bcrypt.hash(password, 10);
-    // const hashPassword = await bcrypt.hash(password, encryptedPassword)
+
     await user.update({
         where:{
             userId:id
@@ -63,12 +48,12 @@ router.put("/update/:id",userToken,async(req,res) =>{
             lName:lName
         }
     })
-    return res.send("successfully")
+    return res.send("Update Successfully")
 })
 
 router.delete("/del/:id",async(req,res) =>{
     let id = req.params.id
-    id = parseInt(id)
+    id = Number(id)
    
     let result = await user.deleteMany({
         where:{
@@ -84,7 +69,7 @@ router.delete("/del/:id",async(req,res) =>{
 router.post('/register', async (req, res) => {
     const { userName, email, password, fName,lName } = req.body
     if (!(userName && email && password && fName && lName )) {
-        return res.status(400).send("please compleate you input !")
+        return res.status(400).send("Please compleate you input !")
     }
     const existUser = await user.findFirst({
         where: { userName : userName ,email: email  }
@@ -93,7 +78,6 @@ router.post('/register', async (req, res) => {
         return res.status(409).send("User is already exist !")
     }
     encryptedPassword = await bcrypt.hash(password, 10);
-    // const hashPassword = await bcrypt.hash(password, encryptedPassword)
     await user.create({
         data: {
             userName: userName,
@@ -103,39 +87,9 @@ router.post('/register', async (req, res) => {
             lName:lName
         }
     })
-    return res.send("successfully")
+    return res.send("Register Successfully")
 })
 
-
-// router.post("/login",async(req,res) =>{
-//     try {
-//         const {email,password} = req.body;
-//         if(!(email && password)){
-//             res.status(400).send("please compleate all input !")
-//         }
-//         const existUser =  await user.findFirst({
-//             where: { email: email  }
-//         })
-
-//         if(existUser && (await bcrypt.compare(password, existUser.password))){
-//             const token = jwt.sign(
-//                 {email},
-//                 process.env.Token_Key,
-//                 {
-//                     expiresIn: "5m"
-//                 }
-//             )
-//             existUser.token = token 
-
-//         res.status(200).json(existUser)
-
-//         }
-//         res.status(400).send("Error")
-        
-//     } catch (error) {
-//         console.log(error)
-//     }
-// })
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -166,6 +120,6 @@ router.post('/logout',userToken,async(req,res) => {
             token:req.token
         }
     })
-    return res.status(200).send("logout successfully")
+    return res.status(200).send("Logout successfully")
 })
 module.exports = router

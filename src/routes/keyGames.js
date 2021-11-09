@@ -182,7 +182,9 @@ router.post("/add",async(req,res) =>{
        })
    }
 
-    return res.send("Add success ")
+    return res.send({keyId:result.keyId,status:"add success"})
+    // send({ userId:existUser.userId,token: token})
+
 })
 
 router.put("/update/:id",async(req,res) =>{
