@@ -30,7 +30,7 @@ model cart {
   cartId         Int      @id @unique @default(autoincrement())
   keygames_keyId Int
   user_userId    Int
-  keygames       keygames @relation(fields: [keygames_keyId], references: [keyId], onDelete: NoAction, onUpdate: NoAction)
+  keygames       keygames @relation(fields: [keygames_keyId], references: [keyId], onDelete: Cascade, onUpdate: NoAction)
   user           user     @relation(fields: [user_userId], references: [userId], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([keygames_keyId], name: "fk_keygames_has_user_keygames1_idx")
@@ -53,8 +53,8 @@ model keycategory {
   kcId           Int      @id @default(autoincrement())
   keygames_keyID Int
   gametags_tagId Int
-  gametags       gametags @relation(fields: [gametags_tagId], references: [tagId], onDelete: NoAction, onUpdate: NoAction)
-  keygames       keygames @relation(fields: [keygames_keyID], references: [keyId], onDelete: NoAction, onUpdate: NoAction)
+  gametags       gametags @relation(fields: [gametags_tagId], references: [tagId], onDelete: Cascade, onUpdate: NoAction)
+  keygames       keygames @relation(fields: [keygames_keyID], references: [keyId], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([gametags_tagId], name: "fk_keygames_has_gametags_gametags1_idx")
   @@index([keygames_keyID], name: "fk_keygames_has_gametags_keygames1_idx")
@@ -70,9 +70,9 @@ model keygames {
   gamedeveloper_devId Int
   Platform_pId        Int
   user_userId         Int
-  platform            platform      @relation(fields: [Platform_pId], references: [pId], onDelete: NoAction, onUpdate: NoAction)
-  gamedeveloper       gamedeveloper @relation(fields: [gamedeveloper_devId], references: [devId], onDelete: NoAction, onUpdate: NoAction)
-  user                user          @relation(fields: [user_userId], references: [userId], onDelete: NoAction, onUpdate: NoAction)
+  platform            platform      @relation(fields: [Platform_pId], references: [pId], onDelete: Cascade, onUpdate: NoAction)
+  gamedeveloper       gamedeveloper @relation(fields: [gamedeveloper_devId], references: [devId], onDelete: Cascade, onUpdate: NoAction)
+  user                user          @relation(fields: [user_userId], references: [userId], onDelete: Cascade, onUpdate: NoAction)
   cart                cart[]
   keycategory         keycategory[]
 

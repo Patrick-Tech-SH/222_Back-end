@@ -160,13 +160,13 @@ router.put("/updateimage/:id",upload.any(),async(req,res)=>{
 
 
 router.post("/add",async(req,res) =>{
-    let {gameName,gameDetail,price,releaseDate,images,gamedeveloper_devId,Platform_pId,user_userId,gametags} = req.body
-    if(!(gameName&&gameDetail&&price&&releaseDate&&images&&gamedeveloper_devId&&Platform_pId&&user_userId)){
+    let {gameName,gameDetail,price,releaseDate,gamedeveloper_devId,Platform_pId,user_userId,gametags} = req.body
+    if(!(gameName&&gameDetail&&price&&releaseDate&&gamedeveloper_devId&&Platform_pId&&user_userId)){
         return res.send("Please check youu data again!!")
     }
     releaseDate =  new Date(releaseDate)
     
-    let keygameObject =  {gameName,gameDetail,price,releaseDate,images,gamedeveloper_devId,Platform_pId,user_userId}
+    let keygameObject =  {gameName,gameDetail,price,releaseDate,gamedeveloper_devId,Platform_pId,user_userId}
     
     let result = await keygames.create({
         data: keygameObject
@@ -188,9 +188,9 @@ router.post("/add",async(req,res) =>{
 router.put("/update/:id",async(req,res) =>{
     let id = req.params.id
     id = Number(id)
-    let {gameName,gameDetail,price,releaseDate,images,gameDeveloper_devId,Platform_pId} = req.body
+    let {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId} = req.body
     releaseDate =  new Date(releaseDate)
-    let keygameObject =  {gameName,gameDetail,price,releaseDate,images,gameDeveloper_devId,Platform_pId}
+    let keygameObject =  {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId}
     let result = await keygames.updateMany({
         where :{
             keyId:id
@@ -205,7 +205,7 @@ router.put("/update/:id",async(req,res) =>{
 })
 router.delete("/del/:id",async(req,res) =>{
     let id = req.params.id
-    id = parseInt(id)
+    id = Number(id)
     // await cart.deleteMany({
     //     where:{
     //         keyGames_keyId:id
