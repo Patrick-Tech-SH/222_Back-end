@@ -75,6 +75,29 @@ router.get("/getbyid/:id", async (req, res) => {
      return res.send({ data: totalkeygames })
 
 })
+
+router.get("/getkeybyuserid/:id", async (req, res) => {
+    let id = req.params.id
+    id = Number(id)
+    let totalkeygames = await keygames.findMany({
+        where:{
+            user_userId:id
+        },
+        include: {
+            gamedeveloper:true,
+            platform:true,
+            keycategory:{include:{gametags:{select:{tagName:true}}}} ,
+            cart:true
+           
+        }
+    })
+    totalkeygames.forEach(item => {
+        item.releaseDate = dayjs(item.releaseDate).format("DD/MM/YYYY")  
+    });
+    
+     return res.send({ data: totalkeygames })
+
+})
 router.get("/getimage/:id",async(req,res)=>{
     let id = req.params.id
     id = Number(id)
