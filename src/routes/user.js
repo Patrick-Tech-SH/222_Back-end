@@ -5,7 +5,7 @@ const fs = require("fs/promises")
 const { PrismaClient } = require("@prisma/client")
 const { response } = require("express")
 const {user } = new PrismaClient()
-const {userToken} = require("../middlewares/authen")
+const {userToken,adminToken} = require("../middlewares/authen")
 const  logout  = require('../model/model');
 
 
@@ -34,7 +34,7 @@ router.put("/update/:id",userToken,async(req,res) =>{
     if(!(password&&email&&fName&&lName)){
         return res.send("Can not find user id.  Please check your user id !")
     }
-
+try {
     encryptedPassword = await bcrypt.hash(password, 10);
 
     await user.update({
@@ -48,10 +48,14 @@ router.put("/update/:id",userToken,async(req,res) =>{
             lName:lName
         }
     })
+} catch (error) {
+    return res.send("Can not find user!")
+}
+    
     return res.send("Update Successfully")
 })
 
-router.delete("/del/:id",async(req,res) =>{
+router.delete("/del/:id",adminToken,async(req,res) =>{
     let id = req.params.id
     id = Number(id)
    
@@ -103,7 +107,7 @@ router.post('/login', async (req, res) => {
         }
         
         if(existUser.status == true){
-            return res.status(401).send("User unauthorized")
+            return res.status(401).send("There is a problem with your account, please contact admin.")
         }
          delete existUser.password 
     const token =jwt.sign(existUser, process.env.Token_Key,{expiresIn:"30m"})

@@ -5,6 +5,7 @@ const dayjs = require("dayjs")
 const multer = require("multer")
 const path = require("path")
 const { request } = require("../../server")
+const { userToken } = require("../middlewares/authen")
 const { update } = require("../model/model")
 
 const storage = multer.diskStorage({
@@ -76,7 +77,7 @@ router.get("/getbyid/:id", async (req, res) => {
 
 })
 
-router.get("/getkeybyuserid/:id", async (req, res) => {
+router.get("/getkeybyuserid/:id",userToken, async (req, res) => {
     let id = req.params.id
     id = Number(id)
     let totalkeygames = await keygames.findMany({
@@ -98,7 +99,7 @@ router.get("/getkeybyuserid/:id", async (req, res) => {
      return res.send({ data: totalkeygames })
 
 })
-router.get("/getimage/:id",async(req,res)=>{
+router.get("/getimage/:id",userToken,async(req,res)=>{
     let id = req.params.id
     id = Number(id)
     const result = await keygames.findFirst({
@@ -128,7 +129,7 @@ router.post("/addimage/:id",upload.any(),async(req,res)=>{
     return res.status(200).send("upload success")
 })
 
-router.put("/updateimage/:id",upload.any(),async(req,res)=>{
+router.put("/updateimage/:id",userToken,upload.any(),async(req,res)=>{
     let id = req.params.id
     id = Number(id)
     const file = req.files
@@ -157,6 +158,25 @@ router.put("/updateimage/:id",upload.any(),async(req,res)=>{
     return res.status(200).send("update images success")
 })
 
+router.delete("/deleteimage/:id",userToken,upload.any(),async(req,res)=>{
+    let id = req.params.id
+    id = Number(id)
+    const file = req.files
+    console.log(file)
+    let findoldimg = await keygames.findFirst({
+        where:{
+            keyId:id
+        },
+        select:{
+            images:true
+        },
+    })
+    console.log(findoldimg)
+    var fs = require('fs');
+    let pathDelete = path.join(__dirname, '../../public/storageImages/'+findoldimg.images)
+    fs.unlinkSync(pathDelete);
+    return res.status(200).send("Delete images success")
+})
 
 
 router.post("/add",async(req,res) =>{
@@ -187,7 +207,7 @@ router.post("/add",async(req,res) =>{
 
 })
 
-router.put("/update/:id",async(req,res) =>{
+router.put("/update/:id",userToken,async(req,res) =>{
     let id = req.params.id
     id = Number(id)
     let {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId} = req.body
