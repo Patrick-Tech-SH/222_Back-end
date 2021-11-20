@@ -99,7 +99,7 @@ router.get("/getkeybyuserid/:id",userToken, async (req, res) => {
      return res.send({ data: totalkeygames })
 
 })
-router.get("/getimage/:id",userToken,async(req,res)=>{
+router.get("/getimage/:id",async(req,res)=>{
     let id = req.params.id
     id = Number(id)
     const result = await keygames.findFirst({
@@ -210,9 +210,9 @@ router.post("/add",async(req,res) =>{
 router.put("/update/:id",userToken,async(req,res) =>{
     let id = req.params.id
     id = Number(id)
-    let {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId} = req.body
+    let {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId,user_userId,gametags} = req.body
     releaseDate =  new Date(releaseDate)
-    let keygameObject =  {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId}
+    let keygameObject =  {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId,user_userId,gametags}
     let result = await keygames.updateMany({
         where :{
             keyId:id
