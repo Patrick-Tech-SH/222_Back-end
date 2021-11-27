@@ -21,20 +21,37 @@ router.get("/",adminToken, async (req, res) => {
 router.put("/manage/:id",adminToken,async(req,res) =>{
     let id = req.params.id
     id = Number(id)
-
-    // let {status} = req.body
-   
-     await user.update({
-        where:{
-            userId:id
-        },
-        data:{
-            status:true
-        }
+    const User = await user.findFirst({
+        where: { userId: id }
     })
-
-    return res.send("change status success")
+    if(User.status === false){
+        await user.update({
+            where:{
+                userId:id
+            },
+            data:{
+                status:true
+            }
+        })
+    
+        return res.send("Change status success")
+    }
+    else{
+        await user.update({
+            where:{
+                userId:id
+            },
+            data:{
+                status:false
+            }
+        })
+    
+        return res.send("Change status success")
+    }
+   
+    
 })
+
 router.post('/login', async (req, res) => {
     try {
         const { userName, password } = req.body;
@@ -63,5 +80,16 @@ router.post('/logout',adminToken,async(req,res) => {
         }
     })
     return res.status(200).send("Logout successfully")
+})
+
+router.get("/getuser",adminToken, async (req, res) => {
+    let totaluser = await user.findMany({
+        include: {
+            cart:true
+        }
+    })
+
+     return res.send({ data:totaluser })
+
 })
 module.exports = router

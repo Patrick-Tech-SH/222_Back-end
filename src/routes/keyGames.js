@@ -212,10 +212,23 @@ router.put("/update/:id",userToken,async(req,res) =>{
     id = Number(id)
     let {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId,user_userId,gametags} = req.body
     releaseDate =  new Date(releaseDate)
-    let keygameObject =  {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId,user_userId,gametags}
+    let keygameObject =  {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId,user_userId}
+    console.log(keygameObject)
+    await keycategory.deleteMany({
+        where:{keygames_keyID:id}
+    })
+    for (let i = 0; i < gametags.length; i++) {
+        await keycategory.createMany({
+            data:{
+                keygames_keyID:id,
+                gametags_tagId:gametags[i].id
+            }
+        })
+        
+    }
     let result = await keygames.updateMany({
         where :{
-            keyId:id
+            keyId:id,
         },
         data: keygameObject
     })
