@@ -38,13 +38,7 @@ jobs:
         run : |
           docker images
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/gkey-back-end:latest
-
-      # - name: Build and push
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     push: true
-      #     tags: ${{ secrets.DOCKER_HUB_USERNAME }}/gkey-back-end:latest
-      
+          
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
