@@ -16,7 +16,6 @@ const admin = require('./src/routes/admin')
 
 app.use(cors({
     origin: process.env.ORIGIN
-    
 }))
 
 app.use(express.json())
