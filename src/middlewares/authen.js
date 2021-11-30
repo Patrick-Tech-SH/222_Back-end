@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { request } = require('../../server');
 const  logout  = require('../model/model');
-const config = process.env;
+
 
 const userToken = async (req,res,next) =>{
     const token = await req.header('Authorization').replace('Bearer ', '')
@@ -18,7 +18,7 @@ const userToken = async (req,res,next) =>{
         return res.status(403).send("Please login again!")
     }
     try {
-        const decoded = jwt.verify(token,config.Token_Key)
+        const decoded = jwt.verify(token,process.env.TOKEN_KEY)
         req.user = decoded
         req.token= token
         console.log(req.user)
@@ -43,7 +43,7 @@ const adminToken = async (req,res,next) =>{
         return res.status(403).send("Please login again!")
     }
     try {
-        const decoded = jwt.verify(token,config.Token_Key)
+        const decoded = jwt.verify(token,process.env.TOKEN_KEY)
         req.admin = decoded
         req.token= token
         console.log(req.admin)
@@ -58,7 +58,7 @@ const adminToken = async (req,res,next) =>{
 //         return res.status(403).send("A token is required for authentication !")
 //     }
 //     try {
-//         const decoded = jwt.verify(token,config.Token_Key)
+//         const decoded = jwt.verify(token,process.env.TOKEN_KEY)
 //         req.admin = decoded
 //     } catch (error) {
 //         return res.status(401).send("Invalid Token !")

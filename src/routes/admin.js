@@ -65,7 +65,7 @@ router.post('/login', async (req, res) => {
              return res.status(400).send("invalid Username or password")
         }
          delete existAdmin.password 
-    const token =jwt.sign(existAdmin, process.env.Token_Key,{expiresIn:"30m"})
+    const token =jwt.sign(existAdmin, process.env.TOKEN_KEY,{expiresIn:"30m"})
        return res.header("access-token",token).send({ adminId:existAdmin.adminId,token: token})
 
     } catch(error) {

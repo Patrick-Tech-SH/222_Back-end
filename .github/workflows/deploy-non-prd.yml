@@ -29,7 +29,7 @@ jobs:
           touch .env
           echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
           echo ORIGIN=${{ secrets.ORIGIN }} >> .env
-          echo Token_key=${{ secrets.TOKEN_KEY }} >> .env
+          echo TOKEN_KEY=${{ secrets.TOKEN_KEY }} >> .env
 
       - name: Build Docker image
         run : docker build . --file Dockerfile --tag ${{ secrets.DOCKER_HUB_USERNAME }}/gkey-back-end:latest
