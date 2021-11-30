@@ -53,6 +53,7 @@ router.put("/manage/:id",adminToken,async(req,res) =>{
 })
 
 router.post('/login', async (req, res) => {
+    console.log(req.ip)
     try {
         const { userName, password } = req.body;
         const existAdmin = await admin.findFirst({
