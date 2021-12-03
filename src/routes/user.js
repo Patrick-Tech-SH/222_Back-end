@@ -100,17 +100,15 @@ router.post('/login', async (req, res) => {
         const existUser = await user.findFirst({
             where: { email: email }
         })
-        
         const validPassword =await bcrypt.compare(password,existUser.password)
         if (!(existUser && validPassword)) {
              return res.status(400).send("invalid email or password")
         }
-        
         if(existUser.status == true){
             return res.status(401).send("There is a problem with your account, please contact admin.")
         }
          delete existUser.password 
-    const token =jwt.sign(existUser, process.env.Token_Key,{expiresIn:"30m"})
+    const token =jwt.sign(existUser, process.env.TOKEN_KEY,{expiresIn:"30m"})
        return res.header("access-token",token).send({ userId:existUser.userId,token: token})
 
     } catch(error) {
