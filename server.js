@@ -27,9 +27,14 @@ app.use(express.urlencoded({ extended:true}));
 app.get('/health',(req,res) =>{
     return res.send({
         error: false, 
-        message:'Homepage is working'
+        message:'Service is healthy'
         
 
+    })
+})
+app.get('/',(req,res)=>{
+    return res.send({
+        message:'Homepage is working'
     })
 })
 app.use('/keygames',keygames)
