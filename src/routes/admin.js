@@ -69,7 +69,7 @@ router.post('/login', async (req, res) => {
        return res.header("access-token",token).send({ adminId:existAdmin.adminId,token: token})
 
     } catch(error) {
-        console.log(error)
+        res.status(400).send(error.message)
      }     
 
 })

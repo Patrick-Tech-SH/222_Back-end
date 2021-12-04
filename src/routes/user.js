@@ -101,7 +101,7 @@ router.post('/login', async (req, res) => {
             where: { email: email }
         })
         const validPassword =await bcrypt.compare(password,existUser.password)
-        if (!(existUser && validPassword)) {
+        if ((!existUser || !validPassword)) {
              return res.status(400).send("invalid email or password")
         }
         if(existUser.status == true){
@@ -112,7 +112,7 @@ router.post('/login', async (req, res) => {
        return res.header("access-token",token).send({ userId:existUser.userId,token: token})
 
     } catch(error) {
-        console.log(error)
+        res.status(400).send(error.message)
      }     
 
 })
