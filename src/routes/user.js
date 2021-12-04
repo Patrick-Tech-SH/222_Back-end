@@ -109,7 +109,6 @@ router.post('/login', async (req, res) => {
     } catch(error) {
         res.status(400).send(error.message)
      }     
-
 })
 router.post('/logout',userToken,async(req,res) => {
     await logout.create({
