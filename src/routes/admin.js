@@ -11,11 +11,8 @@ const  logout  = require('../model/model');
 
 router.get("/",adminToken, async (req, res) => {
     let totaladmin = await admin.findMany({
-
     })
-
      return res.send({ data:totaladmin })
-
 })
 
 router.put("/manage/:id",adminToken,async(req,res) =>{
@@ -33,7 +30,6 @@ router.put("/manage/:id",adminToken,async(req,res) =>{
                 status:true
             }
         })
-    
         return res.send("Change status success")
     }
     else{
@@ -45,21 +41,16 @@ router.put("/manage/:id",adminToken,async(req,res) =>{
                 status:false
             }
         })
-    
         return res.send("Change status success")
     }
-   
-    
 })
 
 router.post('/login', async (req, res) => {
-    console.log(req.ip)
     try {
         const { userName, password } = req.body;
         const existAdmin = await admin.findFirst({
             where: { userName: userName }
         })
-        
         const validPassword =await bcrypt.compare(password,existAdmin.password)
         if (!(existAdmin && validPassword)) {
              return res.status(400).send("invalid Username or password")
@@ -67,11 +58,9 @@ router.post('/login', async (req, res) => {
          delete existAdmin.password 
     const token =jwt.sign(existAdmin, process.env.TOKEN_KEY,{expiresIn:"30m"})
        return res.header("access-token",token).send({ adminId:existAdmin.adminId,token: token})
-
     } catch(error) {
         res.status(400).send(error.message)
      }     
-
 })
 
 router.post('/logout',adminToken,async(req,res) => {

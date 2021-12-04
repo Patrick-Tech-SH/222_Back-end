@@ -10,9 +10,7 @@ router.get("/", async (req, res) => {
             keycategory:true
         }
     })
-
      return res.send({ data: allgametags })
-
 })
 
 module.exports = router

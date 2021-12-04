@@ -14,18 +14,14 @@ const storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
 });
-
 function checkFileType(file, cb) {
     const filetypes = /jpeg|jpg|png|gif/;
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase())
-
     const mimetype = filetypes.test(file.mimetype)
-
     if (mimetype) {
         return cb(null, true);
     } else {
         cb('error: image only')
-
     }
 }
 
@@ -74,7 +70,6 @@ router.get("/getbyid/:id", async (req, res) => {
     });
     
      return res.send({ data: totalkeygames })
-
 })
 
 router.get("/getkeybyuserid/:id",userToken, async (req, res) => {
@@ -95,7 +90,6 @@ router.get("/getkeybyuserid/:id",userToken, async (req, res) => {
     totalkeygames.forEach(item => {
         item.releaseDate = dayjs(item.releaseDate).format("DD/MM/YYYY")  
     });
-    
      return res.send({ data: totalkeygames })
 
 })
@@ -107,7 +101,6 @@ router.get("/getimage/:id",async(req,res)=>{
             keyId:id
         }
     })
-    console.log(result)
     let pathFile = path.join(__dirname, '../../public/storageImages/'+ result.images) 
     return res.status(200).sendFile(pathFile)
 })
@@ -116,7 +109,6 @@ router.post("/addimage/:id",upload.any(),async(req,res)=>{
     let id = req.params.id
     id = Number(id)
     const file = req.files
-    console.log(file)
    const result =  await keygames.update({
         data:{
             images:file[0].filename
@@ -133,7 +125,6 @@ router.put("/updateimage/:id",userToken,upload.any(),async(req,res)=>{
     let id = req.params.id
     id = Number(id)
     const file = req.files
-    console.log(file)
     let findoldimg = await keygames.findFirst({
         where:{
             keyId:id
@@ -142,7 +133,6 @@ router.put("/updateimage/:id",userToken,upload.any(),async(req,res)=>{
             images:true
         },
     })
-    console.log(findoldimg)
     var fs = require('fs');
     let pathDelete = path.join(__dirname, '../../public/storageImages/'+findoldimg.images)
     fs.unlinkSync(pathDelete);
@@ -191,7 +181,6 @@ router.post("/add",async(req,res) =>{
     let result = await keygames.create({
         data: keygameObject
     })
-    console.log(result)
    for(let i = 0; i<gametags.length; i++){
        await keycategory.createMany({
            data: {
@@ -203,8 +192,6 @@ router.post("/add",async(req,res) =>{
    }
 
     return res.send({keyId:result.keyId,status:"add success"})
-    // send({ userId:existUser.userId,token: token})
-
 })
 
 router.put("/update/:id",userToken,async(req,res) =>{
@@ -213,7 +200,6 @@ router.put("/update/:id",userToken,async(req,res) =>{
     let {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId,user_userId,gametags} = req.body
     releaseDate =  new Date(releaseDate)
     let keygameObject =  {gameName,gameDetail,price,releaseDate,gameDeveloper_devId,Platform_pId,user_userId}
-    console.log(keygameObject)
     await keycategory.deleteMany({
         where:{keygames_keyID:id}
     })
@@ -236,21 +222,10 @@ router.put("/update/:id",userToken,async(req,res) =>{
         return res.send("Can not find user id.  Please check your user id !")
     }
     res.send("Update Successfully")
-    console.log(result)
 })
 router.delete("/del/:id",async(req,res) =>{
     let id = req.params.id
     id = Number(id)
-    // await cart.deleteMany({
-    //     where:{
-    //         keyGames_keyId:id
-    //     }
-    // })
-    // await keycategory.deleteMany({
-    //     where:{
-    //         keyGames_keyID:id
-    //     }
-    // })
     let result = await keygames.deleteMany({
         where:{
             keyId:id

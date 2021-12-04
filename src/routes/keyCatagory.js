@@ -16,7 +16,6 @@ router.get("/", async (req, res) => {
         item.keygames.releaseDate = dayjs(item.keygames.releaseDate).format("DD/MM/YYYY")  
     });
      return res.send({ data: allcatagory })
-
 })
 
 module.exports = router

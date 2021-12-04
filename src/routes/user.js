@@ -8,16 +8,12 @@ const {user } = new PrismaClient()
 const {userToken,adminToken} = require("../middlewares/authen")
 const  logout  = require('../model/model');
 
-
-
-
 router.get("/",userToken, async (req, res) => {
     let totaluser = await user.findMany({
         include: {
             cart:true
         }
     })
-
      return res.send({ data:totaluser })
 
 })
@@ -58,7 +54,6 @@ try {
 router.delete("/del/:id",adminToken,async(req,res) =>{
     let id = req.params.id
     id = Number(id)
-   
     let result = await user.deleteMany({
         where:{
             userId:id

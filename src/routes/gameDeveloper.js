@@ -10,7 +10,6 @@ router.get("/", async (req, res) => {
             keygames:true
         }
     })
-
      return res.send({ data: allGameDeveloper })
 
 })

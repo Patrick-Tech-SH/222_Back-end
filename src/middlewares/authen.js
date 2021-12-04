@@ -13,7 +13,6 @@ const userToken = async (req,res,next) =>{
             token:token
         }
     })
-    console.log(checklogout)
     if(checklogout){
         return res.status(403).send("Please login again!")
     }
@@ -37,8 +36,6 @@ const adminToken = async (req,res,next) =>{
             token:token
         }
     })
-    console.log(checklogout)
-    console.log(token)
     if(checklogout){
         return res.status(403).send("Please login again!")
     }
@@ -46,7 +43,6 @@ const adminToken = async (req,res,next) =>{
         const decoded = jwt.verify(token,process.env.TOKEN_KEY)
         req.admin = decoded
         req.token= token
-        console.log(req.admin)
     } catch (error) {
         return res.status(401).send("Invalid Token !")
     }
