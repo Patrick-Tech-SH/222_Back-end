@@ -43,9 +43,9 @@ router.get("/", async (req, res) => {
            
         }
     })
-    totalkeygames.forEach(item => {
-        item.releaseDate = dayjs(item.releaseDate).format("DD/MM/YYYY")  
-    });
+    // totalkeygames.forEach(item => {
+    //     item.releaseDate = dayjs(item.releaseDate).format("DD/MM/YYYY")  
+    // });
     
      return res.send({ data: totalkeygames })
 
@@ -65,9 +65,9 @@ router.get("/getbyid/:id", async (req, res) => {
            
         }
     })
-    totalkeygames.forEach(item => {
-        item.releaseDate = dayjs(item.releaseDate).format("DD/MM/YYYY")  
-    });
+    // totalkeygames.forEach(item => {
+    //     item.releaseDate = dayjs(item.releaseDate).format("DD/MM/YYYY")  
+    // });
     
      return res.send({ data: totalkeygames })
 })
@@ -87,9 +87,9 @@ router.get("/getkeybyuserid/:id",userToken, async (req, res) => {
            
         }
     })
-    totalkeygames.forEach(item => {
-        item.releaseDate = dayjs(item.releaseDate).format("DD/MM/YYYY")  
-    });
+    // totalkeygames.forEach(item => {
+    //     item.releaseDate = dayjs(item.releaseDate).format("DD/MM/YYYY")  
+    // });
      return res.send({ data: totalkeygames })
 
 })
